@@ -34,6 +34,26 @@ void TestGgpNode()
 
         objEgpNodeA.Show();
         objEgpNodeC.Show();
+
+        objEgpNodeA.CalcFn(NULL, &objEgpMapC);
+        assert(0 == objEgpNodeA.GetHn());
+        assert(9 == objEgpNodeA.GetGn());
+        assert(9 == objEgpNodeA.GetFn());
+
+        objEgpNodeA.CalcFn(NULL, &objEgpMapC);
+        assert(0 == objEgpNodeA.GetHn());
+        assert(9 == objEgpNodeA.GetGn());
+        assert(9 == objEgpNodeA.GetFn());
+
+        objEgpNodeA.CalcFn(&objEgpNodeA, &objEgpMapC);
+        assert(0 == objEgpNodeA.GetHn());
+        assert(9 == objEgpNodeA.GetGn());
+        assert(9 == objEgpNodeA.GetFn());
+
+        objEgpNodeC.CalcFn(&objEgpNodeA, &objEgpMapC);
+        assert(1 == objEgpNodeC.GetHn());
+        assert(0 == objEgpNodeC.GetGn());
+        assert(1 == objEgpNodeC.GetFn());
     }
     catch(const char *expInfo)
     {

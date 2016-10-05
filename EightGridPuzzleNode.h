@@ -42,6 +42,28 @@ private:
         }
     }
 
+    void CalcGn(const EgpMap<char, 9> *pEgpMap)
+    {
+        m_iGn = m_objEgpMap - *pEgpMap;
+    }
+    
+    void CalcHn(const EgpNode *pobjPreEgpNode)
+    {
+        if ((this == pobjPreEgpNode) || (NULL == pobjPreEgpNode))
+        {
+            return;
+        }
+
+        m_iHn = pobjPreEgpNode->m_iHn + 1;
+    }
+
+    void InitScores()
+    {
+        m_iFn = 0;
+        m_iGn = 0;
+        m_iHn = 0;
+    }
+
 public:
     EgpNode(const EgpMap<char, 9> & objEgpMap, unsigned long ulX, unsigned long ulY)
     {
@@ -92,10 +114,17 @@ public:
         
     void CalcFn(const EgpNode *pobjPreEgpNode, const EgpMap<char, 9> *pEgpMap)
     {
+        assert(NULL != pEgpMap);
+        
         m_pobjPreEgpNode = pobjPreEgpNode;
         //m_pEgpMap = pEgpMap;
-    }
 
+        InitScores();
+        CalcGn(pEgpMap);
+        CalcHn(pobjPreEgpNode);
+
+        m_iFn = m_iGn + m_iHn;
+    }
     
 };
 
