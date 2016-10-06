@@ -1,8 +1,12 @@
 #ifndef _EIGHT_GRID_PUZZLE_H_
 #define _EIGHT_GRID_PUZZLE_H_
 
+#include <iostream>
+#include <vector>
 #include <assert.h>
 #include "EightGridPuzzleMap.h"
+
+using namespace std;
 
 class EgpNode
 {
@@ -17,7 +21,7 @@ private:
 
 private:
     const EgpNode *m_pobjPreEgpNode;
-    //const EgpMap<char, 9> *m_pEgpMap;
+    const EgpMap<char, 9> *m_pEgpMap;
 
 private:
     void ObjCopy(const EgpNode & objEgpNode)
@@ -31,7 +35,7 @@ private:
         m_iHn = objEgpNode.m_iHn;
 
         m_pobjPreEgpNode = objEgpNode.m_pobjPreEgpNode;
-        //m_pEgpMap = objEgpNode.m_pEgpMap;
+        m_pEgpMap = objEgpNode.m_pEgpMap;
     }
 
     void ObjCheck(const EgpMap<char, 9> & objEgpMap, unsigned long ulX, unsigned long ulY)
@@ -78,7 +82,7 @@ public:
         m_iHn = 0;
 
         m_pobjPreEgpNode = NULL;
-        //m_pEgpMap = NULL;
+        m_pEgpMap = NULL;
     }
     
     EgpNode(const EgpNode & objEgpNode)
@@ -111,13 +115,15 @@ public:
     int GetFn() const {return m_iFn;}
     int GetHn() const {return m_iHn;}
     int GetGn() const {return m_iGn;}
+
+    const EgpNode *GetPreNode() const { return m_pobjPreEgpNode;}
         
     void CalcFn(const EgpNode *pobjPreEgpNode, const EgpMap<char, 9> *pEgpMap)
     {
         assert(NULL != pEgpMap);
         
         m_pobjPreEgpNode = pobjPreEgpNode;
-        //m_pEgpMap = pEgpMap;
+        m_pEgpMap = pEgpMap;
 
         InitScores();
         CalcGn(pEgpMap);
@@ -125,6 +131,26 @@ public:
 
         m_iFn = m_iGn + m_iHn;
     }
+
+    bool IsMapEqualTo(const EgpNode& objNode){return (m_objEgpMap == objNode.m_objEgpMap);}
+
+    bool IsInList(const vector<EgpNode>& vcList)
+    {
+        for (auto i : vcList)
+        {
+            if (IsMapEqualTo(i))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    void AddNodeToList(EgpNode objEgpNode, vector<EgpNode>& vcOpenList, vector<EgpNode>& vcClosedList);
+        
+    void AddNextPossStepsToList(vector<EgpNode>& vcOpenList, vector<EgpNode>& vcClosedList);
     
 };
 

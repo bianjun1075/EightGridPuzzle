@@ -1,6 +1,47 @@
 #include <assert.h>
 #include "EightGridPuzzleNode.h"
 
+void EgpNode::AddNextPossStepsToList(vector<EgpNode>& vcOpenList, vector<EgpNode>& vcClosedList)
+{
+    vector<EgpNode> vcNextPossSteps;
+
+    if (m_ulY - 1 >= 0)
+    {
+        EgpNode objUpNode(m_objEgpMap, m_ulX, m_ulY - 1);
+
+        AddNodeToList(objUpNode, vcOpenList, vcClosedList);
+    }
+}
+
+void EgpNode::AddNodeToList(EgpNode objEgpNode, vector<EgpNode>& vcOpenList, vector<EgpNode>& vcClosedList)
+{
+    if (!objEgpNode.IsInList(vcClosedList))
+    {
+        bool isInOpenList = false;
+        for (auto &i : vcOpenList)
+        {
+            if (objEgpNode.IsMapEqualTo(i))
+            {
+                if (this != i.GetPreNode())
+                {
+                    EgpNode objTempNode(i);
+                    objTempNode.CalcFn(this, m_pEgpMap);
+                    if (objTempNode.GetFn() < i.GetFn())
+                    {
+                        i.CalcFn(this, m_pEgpMap);
+                        isInOpenList = true;
+                    }
+                }                    
+            }
+        }
+    
+        if (!isInOpenList)
+        {
+            vcOpenList.push_back(objEgpNode);
+        }
+    }
+}
+
 void TestGgpNode()
 {
     char acTestMap[] = 
@@ -64,3 +105,4 @@ void TestGgpNode()
     
     cout << "TestGgpNode success!" << endl;
 }
+
