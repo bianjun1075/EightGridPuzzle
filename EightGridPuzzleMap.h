@@ -41,6 +41,9 @@ private:
         {
             m_acElements[ulEleIndex] = objEgpMap.m_acElements[ulEleIndex];
         }
+
+        m_ulWidth = objEgpMap.m_ulWidth;
+        m_ulHeight = objEgpMap.m_ulHeight;
     }
 
 public:
@@ -89,6 +92,7 @@ public:
     EgpMap(const EgpMap &objEgpMap)
     {
         //MapCopy(objEgpMap);
+        //cout << "EgpMap(const EgpMap &objEgpMap)" << endl;
         if (GetMapEleNum() == objEgpMap.GetMapEleNum())
         {
             for (unsigned long long ulEleIndex = 0; ulEleIndex < MAP_ELE_NUM; ulEleIndex++)
@@ -119,6 +123,7 @@ public:
 
     EgpMap & operator=(const EgpMap &objEgpMap)
     {
+        //cout << "EgpMap & operator=(const EgpMap &objEgpMap)" << endl;
         MapCopy(objEgpMap);
 
         return *this;

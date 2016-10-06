@@ -8,12 +8,15 @@
 
 
 extern void GgpMapTest();
-extern void TestGgpNode();
+extern void TestEgpNode();
+extern void TestEgpNodeAddList();
+
 
 int main(void)
 {
     GgpMapTest();
-    TestGgpNode();
+    TestEgpNode();
+    TestEgpNodeAddList();
     return 0;
 }
 

@@ -64,6 +64,15 @@ void GgpMapTest()
         assert(0 == (objEgpMapB - objEgpMapC));
 
         assert(9 == (objEgpMapB - objEgpMapD));
+
+        assert(3 == objEgpMapC.GetHeight());
+        assert(3 == objEgpMapC.GetWidth());
+
+        //cout << "--------------------------" << endl;
+        EgpMap<char, 9> objEgpMapE = objEgpMapA;
+        //cout << "--------------------------" << endl;
+        assert(3 == objEgpMapE.GetHeight());
+        assert(3 == objEgpMapE.GetWidth());
     }
     catch(const char* expInfo)
     {

@@ -42,6 +42,9 @@ private:
     {
         if ((ulX >= objEgpMap.GetWidth()) || (ulY >= objEgpMap.GetHeight()))
         {
+            cout << "objEgpMap.GetWidth() = " << objEgpMap.GetWidth() << ", ";
+            cout << "objEgpMap.GetHeight() = " << objEgpMap.GetHeight() << ", " << endl;
+            cout << "(" << ulX << ", " << ulY << ")" << endl;
             throw "EgpNode: ObjCheck para error!";
         }
     }
@@ -108,8 +111,8 @@ public:
     {
         cout << "obj(" << m_ulX << "," << m_ulY << "): " << endl;
         cout << "m_iFn = " << m_iFn;
-        cout << "m_iGn = " << m_iFn;
-        cout << "m_iHn = " << m_iFn << endl;
+        cout << ", m_iGn = " << m_iGn;
+        cout << ", m_iHn = " << m_iHn << endl;
     }
 
     int GetFn() const {return m_iFn;}
