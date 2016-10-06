@@ -10,6 +10,7 @@
 extern void GgpMapTest();
 extern void TestEgpNode();
 extern void TestEgpNodeAddList();
+extern void RunTest();
 
 
 int main(void)
@@ -17,6 +18,7 @@ int main(void)
     GgpMapTest();
     TestEgpNode();
     TestEgpNodeAddList();
+    RunTest();
     return 0;
 }
 

@@ -107,6 +107,11 @@ public:
             (m_pobjPreEgpNode == m_pobjPreEgpNode));
     }
 
+    bool operator<(const EgpNode &objEgpNode)
+    {
+        return (m_iFn < objEgpNode.m_iFn);
+    }
+
     void Show()
     {
         cout << "obj(" << m_ulX << "," << m_ulY << "): " << endl;
@@ -136,6 +141,8 @@ public:
     }
 
     bool IsMapEqualTo(const EgpNode& objNode){return (m_objEgpMap == objNode.m_objEgpMap);}
+
+    bool IsMapEqualTo(const EgpMap<char, 9>& objEgpMap) {return (m_objEgpMap == objEgpMap);}
 
     bool IsInList(const vector<EgpNode>& vcList)
     {

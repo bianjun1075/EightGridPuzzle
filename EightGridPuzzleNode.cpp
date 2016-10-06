@@ -1,4 +1,6 @@
 #include <assert.h>
+#include <algorithm>
+
 #include "EightGridPuzzleNode.h"
 
 void EgpNode::AddNextPossStepsToList(vector<EgpNode>& vcOpenList, vector<EgpNode>& vcClosedList)
@@ -193,4 +195,72 @@ void TestEgpNodeAddList()
 
     cout << "TestEgpNodeAddList success!" << endl;
 }
+
+void RunTest()
+{
+    char acTestMapEnd[] = 
+    {
+        "123"
+        "456"
+        "78 "
+    };
+
+    char acTestMapStart[] = 
+    {
+        "782"
+        "1 3"
+        "456"
+    };
+
+    try{
+        EgpMap<char, 9> objEgpMapEnd(acTestMapEnd, 3, 3);
+        EgpMap<char, 9> objEgpMapStart(acTestMapStart, 3, 3);
+
+        vector<EgpNode> vcOpenList;
+        vector<EgpNode> vcClosedList;
+
+        //EgpNode objEgpNodeEnd(objEgpMapEnd, 2, 2);
+        EgpNode objEgpNodeStart(objEgpMapStart, 1, 1);
+
+        objEgpNodeStart.CalcFn(NULL, &objEgpMapEnd);
+
+        vcOpenList.push_back(objEgpNodeStart);
+
+        while (vcOpenList.size() > 0)
+        {
+            EgpNode objEgpNode = vcOpenList.at(0);
+
+            if (objEgpNode.IsMapEqualTo(objEgpMapEnd))
+            {
+                cout << "Good!Got a solution!" << endl;
+                return;
+            }
+            
+            objEgpNode.AddNextPossStepsToList(vcOpenList, vcClosedList);
+            vcOpenList.erase(vcOpenList.begin());
+            vcClosedList.push_back(objEgpNode);
+            
+            sort(vcOpenList.begin(), vcOpenList.end());
+        }
+
+        /*objEgpNodeStart.AddNextPossStepsToList(vcOpenList, vcClosedList);
+
+        assert(vcOpenList.size() == 4);
+        assert(vcClosedList.size() == 0);
+
+        for (auto i : vcOpenList)
+        {
+            i.Show();
+        }*/
+    }
+    catch(const char *expInfo)
+    {
+        cout << expInfo << endl;
+        cout << "RunTest failed!" << endl;
+        return;
+    }
+
+    cout << "Cann't find a solution!RunTest Failed!" << endl;
+}
+
 
