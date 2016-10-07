@@ -66,14 +66,17 @@ void EgpNode::AddNodeToList(EgpNode objEgpNode, vector<EgpNode>& vcOpenList, vec
             if (objEgpNode.IsMapEqualTo(i))
             {
                 isInOpenList = true;
+                //break;
                 if (this != i.GetPreNode())
                 {
                     //EgpNode objTempNode(i);
                     //objTempNode.CalcFn(this, m_pEgpMap);
-                    if (objEgpNode.GetFn() < i.GetFn())
+                    if (objEgpNode.GetFn() <= i.GetFn())
                     {
                         i.CalcFn(this, m_pEgpMap);
+                        assert(i == objEgpNode);
                     }
+                    assert(objEgpNode.GetFn() > i.GetFn());
                 }                    
             }
         }
@@ -196,6 +199,25 @@ void TestEgpNodeAddList()
     cout << "TestEgpNodeAddList success!" << endl;
 }
 
+void ParseSolution(const EgpNode & objEgpNode)
+{
+    vector<EgpNode> vcSolution;
+
+    EgpNode objStepNode = objEgpNode;
+
+    //vcSolution.push_back(objStepNode);
+
+    int i = 0;
+    do
+    {
+        vcSolution.push_back(objStepNode);
+        objStepNode = *(objStepNode.GetPreNode()); 
+        objStepNode.Show();
+    }while ((NULL != objStepNode.GetPreNode()) && (i++ < 30));
+
+    cout << "ParseSolution Success!Solution len = " << vcSolution.size() << endl;
+}
+
 void RunTest()
 {
     char acTestMapEnd[] = 
@@ -205,12 +227,28 @@ void RunTest()
         "78*"
     };
 
+    #if 0
     char acTestMapStart[] = 
     {
         "782"
         "1*3"
         "456"
     };
+    #elif 1
+    char acTestMapStart[] = 
+    {
+        "128"
+        "4*5"
+        "763"
+    };
+    #else
+    char acTestMapStart[] = 
+    {
+        "368"
+        "742"
+        "1*5"
+    };
+    #endif
 
     try{
         EgpMap<char, 9> objEgpMapEnd(acTestMapEnd, 3, 3);
@@ -227,7 +265,8 @@ void RunTest()
         vcOpenList.push_back(objEgpNodeStart);
 
         int iStopCnt = 0;
-        while ((vcOpenList.size() > 0) && (iStopCnt++ < 3))
+        while ((vcOpenList.size() > 0) && (iStopCnt++ < 100000))
+        //while ((vcOpenList.size() > 0))
         {   
             EgpNode objEgpNode = vcOpenList.at(0);
 
@@ -238,6 +277,9 @@ void RunTest()
             if (objEgpNode.IsMapEqualTo(objEgpMapEnd))
             {
                 cout << "Good!Got a solution!" << endl;
+                cout << "OpenList size = " << vcOpenList.size() << endl;
+                cout << "Closed size = " << vcClosedList.size() << endl;
+                ParseSolution(objEgpNode);
                 return;
             }
             
@@ -247,13 +289,25 @@ void RunTest()
             
             sort(vcOpenList.begin(), vcOpenList.end());
 
-            
-            for (auto i : vcOpenList)
+            #if 0
+            cout << "----------vcOpenList--------->" << endl;
+            for (auto i : vcClosedList)
             {
-                cout << "-------------------" << endl;
+                
                 i.Show();
-                cout << "-------------------" << endl;
             }
+            cout << "<---------vcOpenList----------" << endl;
+            #endif
+
+            #if 0
+            cout << "----------vcClosedList--------->" << endl;
+            for (auto i : vcClosedList)
+            {
+                
+                i.Show();
+            }
+            cout << "<---------vcClosedList----------" << endl;
+            #endif
         }
 
         /*objEgpNodeStart.AddNextPossStepsToList(vcOpenList, vcClosedList);

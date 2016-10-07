@@ -51,7 +51,7 @@ private:
 
     void CalcGn(const EgpMap<char, 9> *pEgpMap)
     {
-        m_iGn = m_objEgpMap - *pEgpMap;
+        m_iGn = 3 * (m_objEgpMap - *pEgpMap);
     }
     
     void CalcHn(const EgpNode *pobjPreEgpNode)
@@ -114,7 +114,7 @@ public:
 
     void Show()
     {
-        cout << "obj(" << m_ulX << "," << m_ulY << "): " << endl;
+        cout << "obj(" << m_ulX << "," << m_ulY << "): ";
         cout << "m_iFn = " << m_iFn;
         cout << ", m_iGn = " << m_iGn;
         cout << ", m_iHn = " << m_iHn << endl;

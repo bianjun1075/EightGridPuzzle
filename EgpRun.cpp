@@ -16,8 +16,8 @@ extern void RunTest();
 int main(void)
 {
     GgpMapTest();
-    TestEgpNode();
-    TestEgpNodeAddList();
+    //TestEgpNode();
+    //TestEgpNodeAddList();
     RunTest();
     return 0;
 }
