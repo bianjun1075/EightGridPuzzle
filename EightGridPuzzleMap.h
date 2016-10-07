@@ -67,6 +67,7 @@ public:
     {
         if ((ulX >= m_ulWidth) || (ulY >= m_ulHeight))
         {
+            cout << "EgpMap::SetEle(" << ulX << ", " << ulY << ")" << endl;
             throw ("SetEle: Para(ulX or ulY) out of bounds!\n");
         }
 
@@ -159,6 +160,20 @@ public:
         }
 
         return iDifScore;
+    }
+
+    void Show()
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if ((i > 0) && ((i % 3) == 0))
+            {
+                cout << endl;
+            }
+            
+            cout << m_acElements[i] << " ";
+        }
+        cout << endl;
     }
 };
 

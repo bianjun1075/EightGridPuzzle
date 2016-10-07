@@ -118,6 +118,8 @@ public:
         cout << "m_iFn = " << m_iFn;
         cout << ", m_iGn = " << m_iGn;
         cout << ", m_iHn = " << m_iHn << endl;
+        
+        m_objEgpMap.Show();
     }
 
     int GetFn() const {return m_iFn;}

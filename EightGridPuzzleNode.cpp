@@ -7,7 +7,7 @@ void EgpNode::AddNextPossStepsToList(vector<EgpNode>& vcOpenList, vector<EgpNode
 {
     vector<EgpNode> vcNextPossSteps;
 
-    if (m_ulY - 1 >= 0)
+    if (m_ulY >= 1)
     {
         EgpMap<char, 9> objNextMap(m_objEgpMap);
         objNextMap.SetEle(m_ulX, m_ulY - 1, m_objEgpMap.GetEle(m_ulX, m_ulY));
@@ -31,7 +31,7 @@ void EgpNode::AddNextPossStepsToList(vector<EgpNode>& vcOpenList, vector<EgpNode
         AddNodeToList(objUpNode, vcOpenList, vcClosedList);
     }
 
-    if (m_ulX - 1 >= 0)
+    if (m_ulX >= 1)
     {
         EgpMap<char, 9> objNextMap(m_objEgpMap);
         objNextMap.SetEle(m_ulX - 1, m_ulY, m_objEgpMap.GetEle(m_ulX, m_ulY));
@@ -65,6 +65,7 @@ void EgpNode::AddNodeToList(EgpNode objEgpNode, vector<EgpNode>& vcOpenList, vec
         {
             if (objEgpNode.IsMapEqualTo(i))
             {
+                isInOpenList = true;
                 if (this != i.GetPreNode())
                 {
                     //EgpNode objTempNode(i);
@@ -72,7 +73,6 @@ void EgpNode::AddNodeToList(EgpNode objEgpNode, vector<EgpNode>& vcOpenList, vec
                     if (objEgpNode.GetFn() < i.GetFn())
                     {
                         i.CalcFn(this, m_pEgpMap);
-                        isInOpenList = true;
                     }
                 }                    
             }
@@ -202,13 +202,13 @@ void RunTest()
     {
         "123"
         "456"
-        "78 "
+        "78*"
     };
 
     char acTestMapStart[] = 
     {
         "782"
-        "1 3"
+        "1*3"
         "456"
     };
 
@@ -226,9 +226,14 @@ void RunTest()
 
         vcOpenList.push_back(objEgpNodeStart);
 
-        while (vcOpenList.size() > 0)
-        {
+        int iStopCnt = 0;
+        while ((vcOpenList.size() > 0) && (iStopCnt++ < 3))
+        {   
             EgpNode objEgpNode = vcOpenList.at(0);
+
+            cout << "=====" << iStopCnt << ", " << vcOpenList.size() << "=====" << endl;
+            cout << "chose ";
+            objEgpNode.Show();
 
             if (objEgpNode.IsMapEqualTo(objEgpMapEnd))
             {
@@ -241,6 +246,14 @@ void RunTest()
             vcClosedList.push_back(objEgpNode);
             
             sort(vcOpenList.begin(), vcOpenList.end());
+
+            
+            for (auto i : vcOpenList)
+            {
+                cout << "-------------------" << endl;
+                i.Show();
+                cout << "-------------------" << endl;
+            }
         }
 
         /*objEgpNodeStart.AddNextPossStepsToList(vcOpenList, vcClosedList);
