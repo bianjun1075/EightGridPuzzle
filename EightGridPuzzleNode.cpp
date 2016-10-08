@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <algorithm>
+#include <memory>
 
 #include "EightGridPuzzleNode.h"
 
@@ -76,7 +77,10 @@ void EgpNode::AddNodeToList(EgpNode objEgpNode, vector<EgpNode>& vcOpenList, vec
                         i.CalcFn(this, m_pEgpMap);
                         assert(i == objEgpNode);
                     }
-                    assert(objEgpNode.GetFn() > i.GetFn());
+                    else
+                    {
+                        assert(objEgpNode.GetFn() > i.GetFn());
+                    }
                 }                    
             }
         }
@@ -210,9 +214,12 @@ void ParseSolution(const EgpNode & objEgpNode)
     int i = 0;
     do
     {
+        //objStepNode.Show();
         vcSolution.push_back(objStepNode);
+        //cout << "ParseSolution: objStepNode.GetPreNode() = " << objStepNode.GetPreNode() << endl;
+        //(objStepNode.GetPreNode())->Show();
+        //cout << &objStepNode << endl;
         objStepNode = *(objStepNode.GetPreNode()); 
-        objStepNode.Show();
     }while ((NULL != objStepNode.GetPreNode()) && (i++ < 30));
 
     cout << "ParseSolution Success!Solution len = " << vcSolution.size() << endl;
@@ -234,7 +241,7 @@ void RunTest()
         "1*3"
         "456"
     };
-    #elif 1
+    #elif 0
     char acTestMapStart[] = 
     {
         "128"
@@ -256,6 +263,7 @@ void RunTest()
 
         vector<EgpNode> vcOpenList;
         vector<EgpNode> vcClosedList;
+        vector<EgpNode> vcExistList(10000);
 
         //EgpNode objEgpNodeEnd(objEgpMapEnd, 2, 2);
         EgpNode objEgpNodeStart(objEgpMapStart, 1, 1);
@@ -265,27 +273,46 @@ void RunTest()
         vcOpenList.push_back(objEgpNodeStart);
 
         int iStopCnt = 0;
-        while ((vcOpenList.size() > 0) && (iStopCnt++ < 100000))
+        while ((vcOpenList.size() > 0) && (iStopCnt++ < 10000))
         //while ((vcOpenList.size() > 0))
         {   
-            EgpNode objEgpNode = vcOpenList.at(0);
-
+            //EgpNode objEgpNode = vcOpenList.at(0);
+            //shared_ptr<EgpNode> pobjEgpNode(new EgpNode(vcOpenList.at(0)));
+            //EgpNode *pobjEgpNode = new EgpNode(vcOpenList.at(0));
+            vcExistList.push_back(vcOpenList.at(0));
+            EgpNode *pobjEgpNode = &vcExistList.back();
+ 
             cout << "=====" << iStopCnt << ", " << vcOpenList.size() << "=====" << endl;
             cout << "chose ";
-            objEgpNode.Show();
+            //cout << "pobjEgpNode: " << pobjEgpNode << endl;
+            pobjEgpNode->Show();
 
-            if (objEgpNode.IsMapEqualTo(objEgpMapEnd))
+            /*if ((32 == iStopCnt) || (33 == iStopCnt))
+            {
+                cout << "something wrong" << endl;
+                vcExistList[iStopCnt - 2].Show();
+                vcExistList[iStopCnt - 1].Show();
+                cout << "find something?" << endl;
+            }*/
+            
+            if (pobjEgpNode->IsMapEqualTo(objEgpMapEnd))
             {
                 cout << "Good!Got a solution!" << endl;
                 cout << "OpenList size = " << vcOpenList.size() << endl;
-                cout << "Closed size = " << vcClosedList.size() << endl;
-                ParseSolution(objEgpNode);
+                cout << "ClosedList size = " << vcClosedList.size() << endl;
+                cout << "ExistList size = " << vcExistList.size() << endl;
+                /*for (auto &i : vcExistList)
+                {
+                    cout << &i << ", " << i.GetPreNode() << endl;
+                    i.Show();
+                }*/
+                ParseSolution(*pobjEgpNode);
                 return;
             }
             
-            objEgpNode.AddNextPossStepsToList(vcOpenList, vcClosedList);
+            pobjEgpNode->AddNextPossStepsToList(vcOpenList, vcClosedList);
             vcOpenList.erase(vcOpenList.begin());
-            vcClosedList.push_back(objEgpNode);
+            vcClosedList.push_back(*pobjEgpNode);
             
             sort(vcOpenList.begin(), vcOpenList.end());
 
@@ -293,22 +320,33 @@ void RunTest()
             cout << "----------vcOpenList--------->" << endl;
             for (auto i : vcClosedList)
             {
-                
                 i.Show();
             }
             cout << "<---------vcOpenList----------" << endl;
             #endif
 
-            #if 0
-            cout << "----------vcClosedList--------->" << endl;
+            #if 1
+            /*cout << "----------vcClosedList--------->" << endl;
             for (auto i : vcClosedList)
             {
-                
+                //(*(i.GetPreNode())).Show();
+                cout << "PreNode: " << i.GetPreNode() << endl;
                 i.Show();
             }
-            cout << "<---------vcClosedList----------" << endl;
+            cout << "<---------vcClosedList----------" << endl;*/
             #endif
+            
         }
+
+        #if 0
+        cout << "----------vcExistList--------->" << endl;
+        for (auto &i : vcExistList)
+        {
+            cout << &i << ", " << i.GetPreNode() << endl;
+            i.Show();
+        }
+        cout << "<----------vcExistList---------" << endl;
+        #endif
 
         /*objEgpNodeStart.AddNextPossStepsToList(vcOpenList, vcClosedList);
 

@@ -19,6 +19,7 @@ private:
         return ulY * m_ulWidth + ulX;
     }
 
+    //b EgpMap<char, 9ull>::MapTypeCheck
     void MapTypeCheck(const EgpMap &objEgpMap) const
     {
         if ((0 == m_ulWidth) && (0 == m_ulHeight))
@@ -29,6 +30,12 @@ private:
         if ((GetMapEleNum() != objEgpMap.GetMapEleNum()) || 
             (m_ulWidth != objEgpMap.m_ulWidth) || (m_ulHeight != objEgpMap.m_ulHeight))
         {
+            cout << "GetMapEleNum() = " << GetMapEleNum() << endl;
+            cout << "objEgpMap.GetMapEleNum() = " << objEgpMap.GetMapEleNum() << endl;
+            cout << "m_ulWidth = " << m_ulWidth << endl;
+            cout << "objEgpMap.m_ulWidth = " << objEgpMap.m_ulWidth << endl;
+            cout << "m_ulWidth = " << m_ulHeight << endl;
+            cout << "objEgpMap.m_ulHeight = " << objEgpMap.m_ulHeight << endl;
             throw "MapTypeCheck para error!";
         }
     }
@@ -162,7 +169,7 @@ public:
         return iDifScore;
     }
 
-    void Show()
+    void Show() const
     {
         for (int i = 0; i < 9; i++)
         {

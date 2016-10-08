@@ -93,6 +93,8 @@ public:
         ObjCopy(objEgpNode);
     }
 
+    EgpNode(){}
+
     EgpNode& operator=(const EgpNode & objEgpNode)
     {
         ObjCopy(objEgpNode);
@@ -112,7 +114,7 @@ public:
         return (m_iFn < objEgpNode.m_iFn);
     }
 
-    void Show()
+    void Show() const
     {
         cout << "obj(" << m_ulX << "," << m_ulY << "): ";
         cout << "m_iFn = " << m_iFn;
